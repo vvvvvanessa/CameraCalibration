@@ -111,6 +111,7 @@ class Normal:
                                for j in range(args.BORAD_WIDTH) ],dtype=np.float32)
         
     def update(self, corners, frame_size):
+        # 世界坐标系下每个点的坐标
         board = [self.BOARD] * len(corners)
         if not self.inited:
             self._update_init(board, corners, frame_size)
@@ -171,7 +172,7 @@ class InCalibrator:
         else:
             raise Exception("camera should be fisheye/normal")
         self.corners = []
-
+    # 不需要类对象，可以直接调用类方法
     @staticmethod
     def get_args():
         return args
@@ -243,6 +244,7 @@ class CalibMode():
         cap.set(cv2.CAP_PROP_FPS, args.CAMERA_FPS)
         return cap
 
+    # 输入单图
     def runCalib(self, raw_frame, display_raw=True, display_undist=True):
         calibrator = self.calibrator
         raw_frame = self.imgPreprocess(raw_frame)
@@ -274,6 +276,7 @@ class CalibMode():
         for filename in filenames:
             print(filename)
             raw_frame = cv2.imread(filename)
+            # resize & crop
             raw_frame = self.imgPreprocess(raw_frame)
             img = raw_frame.copy()
             img = self.calibrator.draw_corners(img)
